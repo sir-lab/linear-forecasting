@@ -1,7 +1,7 @@
 # An Analysis of Linear Time Series Forecasting Models (ICML 2024)
 Authors: [William Toner](https://github.com/WToner) and [Luke Darlow](https://github.com/lukedarlow)
 
-This is the official repository to replicate the Oridinary Least Squares models from ["An Analysis of Linear Time Series Forecasting Models"](https://arxiv.org/abs/2403.14587).
+This is the official repository to replicate the Ordinary Least Squares models from ["An Analysis of Linear Time Series Forecasting Models"](https://arxiv.org/abs/2403.14587).
 
 We chose to keep this repository minimal for ease of use, thereby refraining from including any baseline comparitor methods. For the paper we ensured that all comparison methods were not affected by the 'drop_last' problem. See [the FITS repo](https://github.com/VEWOXIC/FITS), where we worked with those authors to highlight and remedy this issue. 
 
