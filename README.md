@@ -8,3 +8,8 @@ We chose to keep this repository minimal for ease of use, thereby refraining fro
 This repository requires only Pandas, Numpy and SKLearn (no deep learning frameworks), yet produces models that are comparable or better (see Table 3 in the paper) than state-of-the-art.
 
 Commands to replicate the main performance results in Table 2 can be found in [run_main.sh](run_main.sh), while commands for regularised models in Table 3 can be found in [run_regularised.sh](run_regularised.sh).
+
+### Running OLS solutions on custom csv data
+By setting the dataset to 'custom' and providing the correct root, csv filename, and train/test percentages, you can run OLS solutions for custom csv datasets, as follows:
+
+`python main.py --dataset custom --context_length 720 --horizon 96  --root data/ --custom_csv_filename path_to_data.csv --custom_train_percentage 0.6 --custom_test_percentage 0.2`

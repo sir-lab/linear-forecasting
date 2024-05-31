@@ -68,6 +68,8 @@ class DatasetCustom():
                  split='train', 
                  context_length=336, 
                  horizon=336,  
+                 train_percentage=0.7,
+                 test_percentage=0.2,
                  ):
         assert split in ['train', 'test', 'val']
         
@@ -75,6 +77,9 @@ class DatasetCustom():
         self.context_length = context_length
         self.horizon = horizon
         self.split = split
+        assert train_percentage + test_percentage < 1.0, f'No validation data with train/test percentages of {train_percentage}/{test_percentage}'
+        self.train_percentage = train_percentage
+        self.test_percentage = test_percentage
 
         self.__read_data__()
 
@@ -82,8 +87,8 @@ class DatasetCustom():
         self.scaler = StandardScaler()
         df_raw = pd.read_csv(self.path)
         
-        num_train = int(len(df_raw) * 0.7)
-        num_test = int(len(df_raw) * 0.2)
+        num_train = int(len(df_raw) * self.train_percentage)
+        num_test = int(len(df_raw) * self.test_percentage)
         num_vali = len(df_raw) - num_train - num_test
         border1s = [0, num_train - self.context_length, len(df_raw) - num_test - self.context_length]
         border2s = [num_train, num_train + num_vali, len(df_raw)]
@@ -110,7 +115,8 @@ class DatasetCustom():
     def __len__(self):
         return len(self.data) - self.context_length - self.horizon + 1
 
-def dataset_selector(key, context_length, horizon, root='data/'):
+def dataset_selector(key, context_length, horizon, root='data/', 
+                     custom_csv_filename=None, custom_train_percentage=0.7, custom_test_percentage=0.2):
     if key=='ETTh1':
         dataset_train = DatasetETTs(path=os.path.join(root, 'ETTh1.csv'), freq='h', split='train', context_length=context_length, horizon=horizon)
         dataset_val = DatasetETTs(path=os.path.join(root, 'ETTh1.csv'), freq='h', split='val', context_length=context_length, horizon=horizon)
@@ -143,6 +149,11 @@ def dataset_selector(key, context_length, horizon, root='data/'):
         dataset_train = DatasetCustom(path=os.path.join(root, 'exchange_rate.csv'), split='train', context_length=context_length, horizon=horizon)
         dataset_val = DatasetCustom(path=os.path.join(root, 'exchange_rate.csv'), split='val', context_length=context_length, horizon=horizon)
         dataset_test = DatasetCustom(path=os.path.join(root, 'exchange_rate.csv'), split='test', context_length=context_length, horizon=horizon)
+    elif key=='custom':
+        assert custom_csv_filename is not None
+        dataset_train = DatasetCustom(path=os.path.join(root, custom_csv_filename), split='train', context_length=context_length, horizon=horizon, train_percentage=custom_train_percentage, test_percentage=custom_test_percentage)
+        dataset_val = DatasetCustom(path=os.path.join(root, custom_csv_filename), split='val', context_length=context_length, horizon=horizon, train_percentage=custom_train_percentage, test_percentage=custom_test_percentage)
+        dataset_test = DatasetCustom(path=os.path.join(root, custom_csv_filename), split='test', context_length=context_length, horizon=horizon, train_percentage=custom_train_percentage, test_percentage=custom_test_percentage)
     else:
         raise NotImplementedError
     return dataset_train, dataset_val, dataset_test

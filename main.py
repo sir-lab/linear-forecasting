@@ -18,6 +18,10 @@ if __name__  == '__main__':
 
     parser = argparse.ArgumentParser() 
     parser.add_argument('--dataset', action='store', type=str, default='ETTh1', help="Dataset selector")
+    parser.add_argument('--root', action='store', type=str, default='data/', help="Root directory for standard csvs or custom file")
+    parser.add_argument('--custom_csv_filename', action='store', type=str, default=None, help="Name of custom csv file")
+    parser.add_argument('--custom_train_percentage', action='store', type=float, default=0.7, help="Only used for custom csv files")
+    parser.add_argument('--custom_test_percentage', action='store', type=float, default=0.2, help="Only used for custom csv files")
     parser.add_argument('--context_length', action='store', type=int, default=720, help="Context length to train on")
     parser.add_argument('--horizon', action='store', type=int, default=720, help="Forecast horizon length")
     parser.add_argument('--alpha', action='store', type=float, default=0.00001, help="Regularisation param")
@@ -32,7 +36,12 @@ if __name__  == '__main__':
         np.random.seed(args.seed)
 
     ########################################################### DATASETS AND LOADERS
-    dataset_train, dataset_val, dataset_test = dataset_selector(args.dataset, args.context_length, args.horizon)  # NOTE: set root='path/to/folder/containing/csv/' if you like
+    dataset_train, dataset_val, dataset_test = dataset_selector(args.dataset, args.context_length, args.horizon,
+                                                                root=args.root,
+                                                                custom_csv_filename=args.custom_csv_filename,
+                                                                custom_train_percentage=args.custom_train_percentage, 
+                                                                custom_test_percentage=args.custom_test_percentage,
+                                                                )  
 
     ########################################################### MODEL DEFINITIONS
     model = OLS(dataset_train.data, 
