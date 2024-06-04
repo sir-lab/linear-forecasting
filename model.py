@@ -93,6 +93,7 @@ class OLS():
                 X_data = X[:,series_idx,:]
                 y_data = y[:,series_idx,:]
                 if self.max_train_N is not None and X_data.shape[0]>self.max_train_N:
+                    idxs = np.arange(X_data.shape[0])
                     idxs = np.random.choice(idxs, size=self.max_train_N, replace=False)
                     self.models[series_idx].fit(X_data[idxs], y_data[idxs])
                 else:
