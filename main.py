@@ -26,7 +26,7 @@ if __name__  == '__main__':
     parser.add_argument('--horizon', action='store', type=int, default=720, help="Forecast horizon length")
     parser.add_argument('--alpha', action='store', type=float, default=0.00001, help="Regularisation param")
     parser.add_argument('--instance_norm', action=argparse.BooleanOptionalAction, default=True, help="Whether to use instance norm (+IN in paper)")
-    parser.add_argument('--individual', action=argparse.BooleanOptionalAction, default=True, help="Whether to use instance norm (+IN in paper)")
+    parser.add_argument('--individual', action=argparse.BooleanOptionalAction, default=True, help="One model per variable when true, otherwise a single model across all variables")
     parser.add_argument('--seed', action='store', type=int, default=42, help="Random Seed")
     parser.add_argument('--max_train_N', action='store', type=int, default=None, help="Truncate training data (faster approximate fit, good for debugging)")
     args = parser.parse_args()   
